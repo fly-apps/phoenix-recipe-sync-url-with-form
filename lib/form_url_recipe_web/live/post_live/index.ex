@@ -26,25 +26,23 @@ defmodule FormUrlRecipeWeb.PostLive.Index do
     |> assign(:post, %Post{})
   end
 
-  defp apply_action(socket, :index, _params) do
-    changeset = Blog.change_post(%Post{})
+  defp apply_action(socket, :index, params) do
+    attrs = Map.take(params, ["title", "author"])
+    changeset = Blog.change_post(%Post{}, attrs)
 
     socket
     |> assign(:page_title, "Listing Posts")
     |> assign(:post, nil)
-    |> assign(:posts, Blog.search_posts(%{}))
+    |> assign(:posts, Blog.search_posts(attrs))
     |> assign(:authors, Blog.list_authors())
     |> assign(:changeset, changeset)
   end
 
   @impl true
   def handle_event("search_posts", %{"post" => attrs}, socket) do
-    changeset = Blog.change_post(%Post{}, attrs)
-
     {:noreply,
       socket
-      |> assign(:changeset, changeset)
-      |> assign(:posts, Blog.search_posts(attrs))
+      |> push_patch(to: Routes.post_index_path(socket, :index, attrs))
     }
   end
 
