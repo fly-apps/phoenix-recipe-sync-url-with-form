@@ -6,7 +6,7 @@ defmodule FormUrlRecipeWeb.PostLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, posts: list_posts(), authors: Blog.list_authors())}
+    {:ok, assign(socket, posts: [], authors: [])}
   end
 
   @impl true
@@ -32,6 +32,8 @@ defmodule FormUrlRecipeWeb.PostLive.Index do
     socket
     |> assign(:page_title, "Listing Posts")
     |> assign(:post, nil)
+    |> assign(:posts, Blog.search_posts(%{}))
+    |> assign(:authors, Blog.list_authors())
     |> assign(:changeset, changeset)
   end
 
