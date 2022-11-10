@@ -40,13 +40,13 @@ defmodule FormUrlRecipe.Blog do
     conditions =
       params
       |> Map.take(["title", "author"])
-      |> Enum.reduce(false, fn
-        {_key, nil}, acc ->
+      |> Enum.reduce(true, fn
+        {_key, value}, acc when value in ["", nil] ->
           acc
 
         {key, value}, acc ->
           atomized_key = String.to_atom(key)
-          dynamic([p], field(p, ^atomized_key) == ^value or ^acc)
+          dynamic([p], field(p, ^atomized_key) == ^value and ^acc)
       end)
 
     query = from p in Post, where: ^conditions
