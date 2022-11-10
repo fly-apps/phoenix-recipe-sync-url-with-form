@@ -27,12 +27,25 @@ defmodule FormUrlRecipeWeb.PostLive.Index do
   end
 
   defp apply_action(socket, :index, _params) do
+    changeset = Blog.change_post(%Post{})
+
     socket
     |> assign(:page_title, "Listing Posts")
     |> assign(:post, nil)
+    |> assign(:changeset, changeset)
   end
 
   @impl true
+  def handle_event("search_posts", %{"post" => attrs}, socket) do
+    changeset = Blog.change_post(%Post{}, attrs)
+
+    {:noreply,
+      socket
+      |> assign(:changeset, changeset)
+      |> assign(:posts, Blog.search_posts(attrs))
+    }
+  end
+
   def handle_event("delete", %{"id" => id}, socket) do
     post = Blog.get_post!(id)
     {:ok, _} = Blog.delete_post(post)

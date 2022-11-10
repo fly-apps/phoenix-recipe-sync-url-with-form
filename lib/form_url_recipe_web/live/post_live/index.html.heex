@@ -13,6 +13,22 @@
   </.modal>
 <% end %>
 
+<.form
+  let={f}
+  for={@changeset}
+  id="post-form"
+  phx-change="search_posts"
+  phx-submit="search_posts">
+
+  <%= label f, :title %>
+  <%= text_input f, :title %>
+  <%= error_tag f, :title %>
+
+  <%= label f, :author %>
+  <%= text_input f, :author %>
+  <%= error_tag f, :author %>
+</.form>
+
 <table>
   <thead>
     <tr>

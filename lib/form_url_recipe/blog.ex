@@ -22,6 +22,33 @@ defmodule FormUrlRecipe.Blog do
   end
 
   @doc """
+  Returns the list of posts based on a search map.
+
+  ## Examples
+
+      iex> search_posts(%{"title" => "foo"})
+      [%Post{}, ...]
+
+  """
+  def search_posts(params) do
+    conditions =
+      params
+      |> Map.take(["title", "author"])
+      |> Enum.reduce(false, fn
+        {_key, nil}, acc ->
+          acc
+
+        {key, value}, acc ->
+          atomized_key = String.to_atom(key)
+          dynamic([p], field(p, ^atomized_key) == ^value or ^acc)
+      end)
+
+    query = from p in Post, where: ^conditions
+
+    Repo.all(query)
+  end
+
+  @doc """
   Gets a single post.
 
   Raises `Ecto.NoResultsError` if the Post does not exist.
