@@ -6,7 +6,7 @@ defmodule FormUrlRecipeWeb.PostLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :posts, list_posts())}
+    {:ok, assign(socket, posts: list_posts(), authors: Blog.list_authors())}
   end
 
   @impl true

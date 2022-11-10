@@ -25,7 +25,7 @@
   <%= error_tag f, :title %>
 
   <%= label f, :author %>
-  <%= text_input f, :author %>
+  <%= select f, :author, @authors, prompt: "All authors" %>
   <%= error_tag f, :author %>
 </.form>
 

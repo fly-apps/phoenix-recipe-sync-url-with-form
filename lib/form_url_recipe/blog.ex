@@ -21,6 +21,12 @@ defmodule FormUrlRecipe.Blog do
     Repo.all(Post)
   end
 
+  def list_authors do
+    query = from p in Post, select: p.author, distinct: true
+
+    Repo.all(query)
+  end
+
   @doc """
   Returns the list of posts based on a search map.
 
